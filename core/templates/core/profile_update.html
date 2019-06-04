@@ -1,0 +1,21 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Profile Update" %}{% endblock %}
+
+{% block content %}
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form1.as_p }}
+        {{ form2.as_p }}
+        <input type="submit" value="Update">
+    </form>
+
+{% endblock %}
+
+
+{% block extra_body %}
+
+{% endblock %}

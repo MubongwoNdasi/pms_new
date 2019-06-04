@@ -1,0 +1,21 @@
+
+
+    <form method="post" action="{% url 'cart:update' %}">
+
+        {% csrf_token %}
+
+        <input type="hidden" name="drug_id" value="{{ drug.id }}">
+
+        {% if drug in cart.drugs.all %}
+                In cart <button type="submit">Remove?</button>
+        {% else %}
+                <button type="submit">Add to cart</button>
+        {% endif %}
+
+    </form>
+
+    {% if request.user.is_pharmacist %}
+
+            {% include 'drug/snippets/update-cart.html' with drug=object cart=cart %}
+
+    {% endif %}

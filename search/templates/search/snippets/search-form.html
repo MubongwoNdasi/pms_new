@@ -1,0 +1,7 @@
+
+
+    <form method="get" action="{% url 'search:list' %}">
+        <input type="search" placeholder="Search" name="q" value="{{ request.GET.q }}">
+        <input type="submit" value="search">
+    </form>
+

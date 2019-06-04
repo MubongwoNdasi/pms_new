@@ -1,0 +1,92 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Drug Details" %}{% endblock %}
+
+{% block content %}
+
+
+    <p>This is my order summary</p><br>
+
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Drug Name</th>
+            <th>Price</th>
+            <th>Discount Price</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for order_drug in drug.drugs.all %}
+
+            <tr>
+                <th>{{ forloop.counter }}</th>
+                <td>{{ order_drug.drug.name }}</td>
+                <td>{{ order_drug.drug.price }}</td>
+                {% if order_drug.drug.discount_price %}
+                <td>{{ order_drug.drug.discount_price }}</td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
+                <td>
+                    <a href="{% url 'drug:remove_single_drug_from_cart' order_drug.drug.slug %}">Reduce</a>
+                    {{ order_drug.quantity }}
+                    <a href="{% url 'drug:add_to_cart' order_drug.drug.slug %}">Add</a></td>
+                <td>
+                    {% if order_drug.drug.discount_price %}
+                        {{ order_drug.get_total_discount_drug_price }} CFA
+                        (saving {{ order_drug.get_amount_saved }} CFA)
+                    {% else %}
+                        {{ order_drug.get_total_drug_price }} CFA
+                    {% endif %}
+                    <a href="{% url 'drug:remove_from_cart' order_drug.drug.slug %}">Remove Drug</a>
+                </td>
+            </tr>
+
+        {% empty %}
+
+            <tr>
+                <td>Your cart is Empty</td>
+            </tr>
+
+            <tr>
+                <td colspan="5">
+                    <a href="{% url 'drug:list' %}">Continue sales</a>
+                </td>
+            </tr>
+
+        {% endfor %}
+
+        {% if total %}
+
+            <tr>
+                <td colspan="5">Total</td>
+                <td>{{ total }} CFA</td>
+            </tr>
+
+            <tr>
+                <td colspan="5">
+                    <a href="{% url 'drug:list' %}">Continue sales</a>
+                    <a href="#">Proceed to check out</a>
+                </td>
+            </tr>
+
+        {% endif %}
+
+
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+
+{% block extra_body %}
+
+{% endblock %}

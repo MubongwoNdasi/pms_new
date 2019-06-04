@@ -1,0 +1,20 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Confirm Delete" %}{% endblock %}
+
+{% block content %}
+
+    <form method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete "{{ drug.name }}"?</p>
+        <input type="submit" value="Confirm">
+    </form>
+
+{% endblock %}
+
+
+{% block extra_body %}
+
+{% endblock %}

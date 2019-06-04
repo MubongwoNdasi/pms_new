@@ -1,0 +1,54 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Drug Details" %}{% endblock %}
+
+{% block content %}
+
+        <!--{{ expired_drugs }}-->
+
+        <!--{{ date_difference }}-->
+        <br>
+
+        {% if request.user.is_admin %}
+
+                <a href="{% url 'drug:edit' slug=drug.slug %}">Edit</a>
+                <a href="{% url 'drug:delete' slug=drug.slug %}">Delete</a>
+
+        {% endif %}
+
+        <br>
+
+        {% if drug.image.url is not null %}
+        <img src="{{ drug.image.url }}" alt="image">
+        {% endif %}
+
+        <h2>{{ drug.name }}</h2>
+        <p>{{ drug.des }}</p>
+        <p>Category: {{ drug.category }}</p>
+        <p>Pharmacy Found: {{ drug.pharmacy }} in {{ drug.pharmacy.city }} precisely in {{ drug.pharmacy.location }}</p>
+
+        {% if drug.discount_price %}
+            <p>Discount Price: {{ drug.discount_price }} CFA</p>
+        {% else %}
+            <p>Price: {{ drug.price }} CFA</p>
+        {% endif %}
+
+        <p>Batch Number: {{ drug.batch_no }}</p>
+        <p>Expiry Date: {{ drug.expiry_date }}</p>
+
+        {% if request.user.is_pharmacist %}
+                <div>
+                        <a href="{{ object.get_add_to_cart_url }}">Add to Cart</a><br>
+                        <a href="{{ object.remove_from_cart_url }}">Remove from Cart</a>
+                </div>
+        {% endif %}
+
+
+{% endblock %}
+
+
+{% block extra_body %}
+
+{% endblock %}

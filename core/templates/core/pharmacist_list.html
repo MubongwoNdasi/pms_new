@@ -1,0 +1,96 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "List of Pharmacy users" %}{% endblock %}
+
+{% block content %}
+
+    {% include 'search/snippets/search-form.html' %}<br>
+
+    {% blocktrans with pharmacy=request.user.pharmacyuser.works_at city=request.user.pharmacyuser.city %}
+        <h1>List of users in "{{ pharmacy }}" Pharmacy in "{{ city }}"</h1>
+    {% endblocktrans %}
+
+
+    <br>
+
+    <div>
+            <div>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <td>Email</td>
+                        <td>First Name</td>
+                        <td>Last Name</td>
+                        <td>Phone Number</td>
+                        <td>Profile Pic</td>
+                        <td>Is Pharmacist</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for pharmacy_user in pharmacy_users %}
+                        <tr>
+                            <td>{{ pharmacy_user.user.email }}</td>
+                            <td>{{ pharmacy_user.user.first_name }}</td>
+                            <td>{{ pharmacy_user.user.last_name }}</td>
+                            <td>{{ pharmacy_user.user.phone }}</td>
+                            <td>
+                                <img src="{{ pharmacy_user.user.profile.image.url }}" alt="profile">
+                            </td>
+                            <td>
+                                <form action="{% url 'core:pharmacist_add' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ pharmacy_user.user.id }}" name="pharmacist_id">
+                                    {% if pharmacy_user.user.is_pharmacist %}
+                                    <input type="submit" value="Remove">
+                                    {% else %}
+                                    <input type="submit" value="Add">
+                                    {% endif %}
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+        {% for category in category %}
+            <p>{{ category.name }}</p>
+        {% endfor %}
+    </div>
+
+    <br>
+
+    {% if is_paginated %}
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+
+
+{% endblock %}
+
+
+{% block extra_body %}
+
+{% endblock %}
+

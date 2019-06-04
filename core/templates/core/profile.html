@@ -1,0 +1,25 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Register Drug" %}{% endblock %}
+
+{% block content %}
+
+    <img src="{{ request.user.profile.image.url }}" alt="image">
+
+    <p>First Name: {{ request.user.first_name }}</p>
+    <p>Last Name: {{ request.user.last_name }}</p>
+    <p>Email: {{ request.user.email }}</p>
+    <p>Phone Number: {{ request.user.phone }}</p>
+    <p>Address: {{ request.user.address }}</p>
+    <p>Woks at: {{ request.user.pharmacyuser.works_at }}</p>
+
+    <a href="{% url 'core:profile_update' %}">Edit</a>
+
+{% endblock %}
+
+
+{% block extra_body %}
+
+{% endblock %}

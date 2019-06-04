@@ -1,0 +1,78 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Drug List" %}{% endblock %}
+
+{% block content %}
+
+    {% include 'search/snippets/search-form.html' %}<br>
+    <h1>{% trans "List of Drugs" %}</h1>
+
+
+        <p>Total Drug count: ??? </p>
+
+
+    <br>
+
+    {% if user.is_admin %}
+        <a href="{% url 'drug:register' %}">New Drug</a>
+        <a href="{% url 'drug:list' %}">View all drugs in the system</a>
+    {% endif %}
+
+    <h2>Here are the drugs added by {{ request.user }}</h2>
+
+    <div>
+        {% for drug in drugs %}
+            <div>
+                <h1><a href="{% url 'drug:detail' slug=drug.slug %}">{{ drug.name }}</a></h1>
+
+                <p>{{ drug.des|truncatewords:10 }}</p>
+                <p>{{ drug.category }}</p>
+
+                {% if drug.discount_price %}
+                    <p>{{ drug.discount_price }} CFA</p>
+                {% else %}
+                    <p>{{ drug.price }} CFA</p>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+
+        {% for category in category %}
+            <p>{{ category.name }}</p>
+        {% endfor %}
+    </div>
+
+    <br>
+
+    {% if is_paginated %}
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+
+
+{% endblock %}
+
+
+{% block extra_body %}
+
+{% endblock %}
+

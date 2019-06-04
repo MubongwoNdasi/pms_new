@@ -1,0 +1,58 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Drug List" %}{% endblock %}
+
+{% block content %}
+
+    {% include 'search/snippets/search-form.html' %}<br>
+    {% if query %}
+
+        <h3>Searched for {{ query }}</h3>
+
+    {% else %}
+
+        {% include 'search/snippets/search-form.html' %}
+
+    {% endif %}
+    <p>Drug count: {{ drug_count }}</p>
+    <br>
+
+    {% if user.is_admin %}
+        <a href="{% url 'drug:register' %}">New Drug</a>
+    {% endif %}
+
+    <div>
+        {% if query %}
+
+            {% for drug in drugs %}
+
+                <h2><a href="{% url 'drug:detail' slug=drug.slug%}">{{ drug.name }}</a></h2>
+                <p>{{ drug.des|truncatewords:10 }}</p>
+                <p>{{ drug.category }}</p>
+                <p>{{ drug.price_snippet }}</p>
+
+            {% empty %}
+
+            <h2>{{ query }} not available</h2>
+
+            {% endfor %}
+
+        {% else %}
+
+            <h3>{{ query }} does not exist</h3>
+
+        {% endif %}
+
+        <a href="{% url 'drug:list' %}">Go back to Drug list</a>
+
+    </div>
+
+
+{% endblock %}
+
+
+{% block extra_body %}
+
+{% endblock %}

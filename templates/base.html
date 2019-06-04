@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    {% load cart_template_tags %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+
+    {% block css %}{% endblock %}
+  </head>
+  <body>
+    {% block body %}
+
+      {% if messages %}
+      <div>
+        <strong>Messages:</strong>
+        {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                  {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                  {{ message|safe }}
+              </li>
+              {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div>
+        <strong>Menu:</strong>
+        <ul>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'drug:list' %}">Drugs</a></li>
+            {% if request.user.is_pharmacist %}
+            <li><a href="{% url 'drug:order_summary' %}"><span>{{ request.user|cart_item_count }}</span> Cart</a></li>
+            {% endif %}
+          <li><a href="{% url 'core:pharmacy_create' %}">Create Pharmacy</a></li>
+          <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+          <li><a href="{% url 'core:profile' name=request.user.first_name %}">Profile</a></li>
+          <li><a href="#">Settings</a></li>
+          <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+          {% else %}
+          <li><a href="{% url 'account_login' %}">Sign In</a></li>
+          <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      {% block content %}
+      {% endblock %}
+
+    {% endblock %}
+
+    {% block extra_body %}
+    {% endblock %}
+
+    {% block js %}{% endblock %}
+
+  </body>
+</html>

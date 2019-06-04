@@ -1,0 +1,22 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Edit Drug" %}{% endblock %}
+
+{% block content %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+    </form>
+
+    <a href="{% url 'drug:list' %}">Go back</a>
+
+{% endblock %}
+
+
+{% block extra_body %}
+
+{% endblock %}
